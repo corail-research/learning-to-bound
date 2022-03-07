@@ -11,22 +11,9 @@
 #include "indepset_instance.hpp"
 #include "indepset_bdd.hpp"
 
-//originals settings
-//#define MAX_NODES_MEMORY        1700000000
-//#define MIN_NODES_DFS		10000
-
-
-//last test
-//#define MAX_NODES_MEMORY        170000000
-//#define MIN_NODES_DFS		10000000
-
-//#define MAX_NODES_MEMORY        17000000
-//#define MIN_NODES_DFS         15000000
-
 #define MAX_NODES_MEMORY        5000000000
 #define MIN_NODES_DFS		100000
 #define TIME_LIMIT		1800
-//#define TIME_LIMIT            18000
 
 using namespace std;
 
