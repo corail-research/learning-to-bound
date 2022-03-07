@@ -1,0 +1,1 @@
+../../instances/140_nodes_rand/12666.clq		oracle	model/relax/140n/model_iter_7900.model		21664	65	65	0	10.6823		40
