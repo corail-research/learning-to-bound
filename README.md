@@ -14,8 +14,7 @@ One challenge in the design of scalable algorithms is the efficient computation 
 		      ├── config_run.sh  # training configuration file
 		      ├── run_misp_training_random.sh  # training launcher
 		      ├── code/
-		      ├── results-local/ # models generated along with learning curves
-		├── portfolio/    
+		      ├── results-local/ # models generated along with learning curves 
 └── indepset/ # branch-and-bound script
 	├── instances/ # maximum independent set instances
 	├── sources/  
