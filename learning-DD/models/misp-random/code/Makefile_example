@@ -8,6 +8,7 @@ lib_dir = $(GNN_HOME)/build_cpuonly/lib
 gnn_lib = $(lib_dir)/libgnn.a
 
 include_dirs = $(CUDA_HOME)/include $(MKL_ROOT)/include $(GNN_HOME)/include ./include/learning ./include/dd
+include_dirs += ../../../../indepset/sources/code/src
 
 CXXFLAGS += $(addprefix -I,$(include_dirs)) -Wno-unused-local-typedef
 CXXFLAGS += -fPIC
