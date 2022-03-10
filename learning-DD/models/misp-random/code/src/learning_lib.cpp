@@ -60,12 +60,6 @@ int SaveModel(const char* filename) {
     return 0;
 }
 
-/*struct cmpByLength {
-    bool operator()(const vector<int>& a, const vector<int>& b) const {
-        return !(a.size()>b.size());
-    }
-};*/
-
 
 int use_cache = 0;
 std::map<std::vector<int>, std::vector<int>> predict_cache;
@@ -77,8 +71,6 @@ extern "C"
 int Init(const int argc, char** argv) {
     signal(SIGINT, intHandler);
 
-//	for(int i = 0; i < argc; i++)
-//		cout << argv[i] << endl;
 
 	cfg::LoadParams(argc, argv);
     GpuHandle::Init(cfg::dev_id, 1);
@@ -137,8 +129,6 @@ int Init(const int argc, char** argv) {
 
 
 int Init2(const int argc, char** argv, int gid, std::string mod) {
-
-cout << "NET " << net << endl;
 
     list_pred.resize(cfg::batch_size);
     for (int i = 0; i < cfg::batch_size; ++i){
@@ -229,7 +219,6 @@ int gid = 1;
 int gid_incr = 2;
 IndepSetInst* new_inst = nullptr;
 
-//Inst = BandBCall(old_inst, sol, real_sol, active_vertices, alone_vert, model, argc, args);
 IndepSetInst* BandBCall(IndepSetInst *inst, int *sol, int *real_sol, vector<int> active_vertices, vector<int> &alone_vert, std::string mod, const int argc, char** args, int nqval){
 
 
