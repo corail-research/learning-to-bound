@@ -59,16 +59,10 @@ class LearningLib(object):
 
     def ClearTrainGraphs(self):
         self.ngraph_train = 0
-        self.lib.ClearTrainGraphs()
+        self.lib.ClearTrainGraph2s()
 
     def InsertGraph(self, g, is_test):
         n_nodes, n_edges, e_froms, e_tos, weights = self.__CtypeNetworkX(g)
-#        print("nb nodes : ",n_nodes)
-#        print("nb edges : ",n_edges)
-#        print("e_froms : ",e_froms)
-#        print("e_tos : ",e_tos)
-#        print("w : ",weights)
-#        sys.stdout.flush()
 
         if is_test:
             t = self.ngraph_test
@@ -76,7 +70,7 @@ class LearningLib(object):
         else:
             t = self.ngraph_train
             self.ngraph_train += 1
-        self.lib.InsertGraph(is_test, t, n_nodes, n_edges, e_froms, e_tos, weights)
+        self.lib.InsertGraph2(is_test, t, n_nodes, n_edges, e_froms, e_tos, weights)
 
     def LoadModel(self, path_to_model):
         self.lib.LoadModel(ctypes.c_char_p(path_to_model.encode('utf8')))
