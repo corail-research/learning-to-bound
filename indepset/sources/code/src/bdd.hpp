@@ -16,9 +16,6 @@
 using namespace std;
 
 
-//
-// State
-//
 typedef boost::dynamic_bitset<> State;
 
 
