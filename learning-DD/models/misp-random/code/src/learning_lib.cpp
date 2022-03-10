@@ -276,7 +276,6 @@ IndepSetInst* BandBCall(IndepSetInst *inst, int *sol, int *real_sol, vector<int>
     }
 	
 }
-cout << "MAP SIZE " << predict_cache.size() << endl;
 if(gid_incr >= 2){gid_incr++;}
 	
 	return new_inst;	
