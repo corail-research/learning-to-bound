@@ -41,7 +41,7 @@ Please see https://github.com/Hanjun-Dai/graphnn for the instructions about how 
 Build the dynamic library:
 
 ```shell
-cd models/misp-random/code
+cd learning-DD/models/misp-random/code
 cp Makefile_example Makefile
 make
 ```
