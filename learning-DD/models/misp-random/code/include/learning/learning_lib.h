@@ -31,6 +31,7 @@ SOFTWARE.
 #include "indepset_instance.hpp"
 #include "graph.h"
 
+extern "C"
 int Init(const int argc, char** argv);
 
 int Init2(const int argc, char** argv, std::vector< std::vector<double>* >* list_pred);
