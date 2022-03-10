@@ -37,7 +37,6 @@ SOFTWARE.
 #include <mkl.h>
 #include <ctime>
 
-extern double oracle_asking_time;
 clock_t init_pred;
 clock_t end_pred;
 
@@ -73,8 +72,8 @@ std::map<std::vector<int>, std::vector<int>> predict_cache;
 
 std::vector< std::vector<double>* > list_pred;
 LearningEnv* test_env;
-//extern INet* net;
 
+extern "C"
 int Init(const int argc, char** argv) {
     signal(SIGINT, intHandler);
 
@@ -139,42 +138,7 @@ int Init(const int argc, char** argv) {
 
 int Init2(const int argc, char** argv, int gid, std::string mod) {
 
-	//delete net;
-	//net = new MISPQNet();
-	//net.reset(new MISPQNet());
-	//net->BuildNet();
-	//}
-
-
-/*
-	//if(0){
-	//net->ActINet(); //ActINet+ActNet useless
-	//net->BuildNet();
-	//net->ActNet();
-	//LoadModel(mod);
-	//}*/
-
 cout << "NET " << net << endl;
-//cout << "NET EDGE SIZE " << net->graph.edge_list.size() << endl;
-//cout << "NET nodes num " << net->graph.num_nodes << endl;
-//cout << "NET edges num " << net->graph.num_edges << endl;
-//cout << "NET subgr num " << net->graph.num_subgraph << endl;
-//for (int i = 0; i < net->graph.edge_list.size(); ++i) cout << net->graph.edge_list[i].first << " - " << net->graph.edge_list[i].second << endl;
-
-	//NStepReplayMem::Init(cfg::mem_size);//Examine this ! Putting another one extends viability...
-	//NStepReplayMem::Init(cfg::mem_size);
-
-//cout << "MEM SIZE cfg::mem_size " << cfg::mem_size << endl;
-
-
-    //Simulator::Init(cfg::num_env);//cfg::num_env = 10
-    //for (int i = 0; i < cfg::num_env; ++i){
-	//delete Simulator::env_list[i];
-        //Simulator::env_list[i] = new LearningEnv();}
-
-	//delete test_env;
-	//test_env = new LearningEnv();
-	
 
     list_pred.resize(cfg::batch_size);
     for (int i = 0; i < cfg::batch_size; ++i){
@@ -191,15 +155,8 @@ int UpdateSnapshot() {
 
 int InsertGraph2(bool isTest, const int g_id, const int num_nodes, const int num_edges, const int* edges_from, const int* edges_to, const double* weights) {
 
-	
-	//std::cout << "start std::make_shared<Graph2>"  << std::endl;
-	//std::cout << "num_nodes " << num_nodes << std::endl;
-	//std::cout << "num_edges "  << num_edges << std::endl;
-	//std::cout << "edges_from"  << *edges_from << std::endl;
-	//std::cout << "edges_to" << *edges_to << std::endl;
-	//std::cout << "weights"  << *weights << std::endl;
+
     auto g = std::make_shared<Graph2>(num_nodes, num_edges, edges_from, edges_to, weights);
-	//std::cout << "start std::make_shared<Graph2>"  << std::endl;
 
 
     if (isTest)
@@ -261,19 +218,12 @@ void print_map(std::map<K,V> &m)
 }
 
 void BandBInit(const int argc, char** args, std::string mod, IndepSetInst *inst, int* sol){
-int gid = 1;	
-	//std::vector< std::vector<double>* > list_pred(1); 
-	//LearningEnv* test_env; //new LearningEnv();
+int gid = 1;
 
 	Init(argc, args);
 
 	LoadModel(mod);
 	std::cout << "model " << mod << std::endl;
-
-	//GSet GSetTest2;
-	//test_env->Insert(inst, gid, &GSetTest);//graph inserted
-
-	//GetSol(gid, sol, &GSetTest);
 }
 
 int gid_incr = 2;
@@ -282,8 +232,7 @@ IndepSetInst* new_inst = nullptr;
 //Inst = BandBCall(old_inst, sol, real_sol, active_vertices, alone_vert, model, argc, args);
 IndepSetInst* BandBCall(IndepSetInst *inst, int *sol, int *real_sol, vector<int> active_vertices, vector<int> &alone_vert, std::string mod, const int argc, char** args, int nqval){
 
-	//if(gid_incr > 2){Init2(argc, args, gid_incr, mod);} //TEST --> memory overflow
-	//GSet GSetTest2;//!\créé n fois
+
 	NStepReplayMem::Clear();
 	if(gid_incr > 2){delete new_inst;}
 	IndepSetInst* new_inst = new IndepSetInst();
@@ -300,10 +249,6 @@ IndepSetInst* BandBCall(IndepSetInst *inst, int *sol, int *real_sol, vector<int>
 	std::cout << GSetTest.Get(gid_incr)->num_edges << endl;
 	std::cout << "graph printing --"  << std::endl;
 
-	//LoadModel(mod);
-
-
-	//before GetSol : have we already seen those active variables ?
 	vector<int> ord;
 	vector<int> key = active_vertices;
 	std::sort(key.begin(), key.end());
@@ -325,7 +270,7 @@ IndepSetInst* BandBCall(IndepSetInst *inst, int *sol, int *real_sol, vector<int>
 	GSetTest.graph_pool.clear();
 
 	time(&end_init_oracle);
-	oracle_asking_time += (double)(end_init_oracle - init_oracle);
+	//oracle_asking_time += (double)(end_init_oracle - init_oracle);
 
 	new_inst->correct_labels(inst, active_vertices, real_active_vertices, alone_vert, sol, real_sol);
 	
@@ -344,9 +289,7 @@ IndepSetInst* BandBCall(IndepSetInst *inst, int *sol, int *real_sol, vector<int>
 }
 cout << "MAP SIZE " << predict_cache.size() << endl;
 if(gid_incr >= 2){gid_incr++;}
-//print_map(predict_cache);
-
-//std::cout << "BandBCall success --"  << std::endl;
+	
 	return new_inst;	
 }
 
@@ -386,7 +329,6 @@ double GetSolOS(const int gid, int* sol, GSet* GSetTest2) {
 		delete list_pred[i];
 		list_pred[i] = new std::vector<double>(2010);}//(cfg::max_n + 10);
 
-//std::cerr << "gestsol	" << std::endl;
 
     std::vector< std::shared_ptr<Graph2> > g_list(1);
     std::vector< std::vector<int>* > states(1);
@@ -398,14 +340,7 @@ double GetSolOS(const int gid, int* sol, GSet* GSetTest2) {
 
     double v = 0;
     int new_action;
-    //while (!test_env->isTerminal())
-    //{
 
-//std::cout << "action list ";
-//for (vector<int>::iterator it = test_env->action_list.begin(); it != test_env->action_list.end(); ++it) {
-//		cout << *it << " ";
-//	}
-//	std::cout << std::endl;
 	mkl_free_buffers();
 
 
@@ -414,8 +349,6 @@ double GetSolOS(const int gid, int* sol, GSet* GSetTest2) {
 
         Predict(g_list, states, list_pred);
 
-	cout << "pred" << endl;	
-
 	end_pred = clock();
 	double time_pred = ((double)(end_pred - init_pred))/CLOCKS_PER_SEC;
 
@@ -423,29 +356,9 @@ double GetSolOS(const int gid, int* sol, GSet* GSetTest2) {
 
 	for (int i = 0; i < test_env->graph->num_nodes; ++i) {
 		new_action = arg_max(test_env->graph->num_nodes, scores.data());
-		cout << "OS " << i << " " << new_action << endl;
 		scores[new_action] = -inf;
 		v += test_env->step(new_action) / r_scaling;
 	    }
-        //new_action = arg_max(test_env->graph->num_nodes, scores.data());
-//	std::cout << "action " << new_action << std::endl; //std::vector< std::vector<double>* > list_pred;
-
-//std::cout << "pred list ";
-//for (vector<double>::iterator it = (*list_pred[0]).begin(); it != (*list_pred[0]).end(); ++it) {
-//		cout << *it << " ";
-//	}
-//	std::cout << std::endl;
-
-//std::cout << "states ";
-//for (vector<int>::iterator it = (*states[0]).begin(); it != (*states[0]).end(); ++it) {
-//		cout << *it << " ";
-//	}
-//	std::cout << std::endl;
-
-
-        
-    //}
-//std::cerr << "gestsol2	" << std::endl;
 
     sol[0] = test_env->graph->num_nodes;
     sol[1] = test_env->width;
@@ -470,8 +383,6 @@ double GetSol(const int gid, int* sol, GSet* GSetTest2, int nqval) {
 		delete list_pred[i];
 		list_pred[i] = new std::vector<double>(2010);}//(cfg::max_n + 10);
 
-//std::cerr << "gestsol	" << std::endl;
-
     std::vector< std::shared_ptr<Graph2> > g_list(1);
     std::vector< std::vector<int>* > states(1);
 
@@ -481,9 +392,6 @@ double GetSol(const int gid, int* sol, GSet* GSetTest2, int nqval) {
     g_list[0] = test_env->graph;
 
 
-
-//std::cerr << "GID	" << gid << std::endl;
-
     double v = 0;
     int new_action;
     int deltas_cond = 0;
@@ -491,11 +399,6 @@ double GetSol(const int gid, int* sol, GSet* GSetTest2, int nqval) {
     while (!test_env->isTerminal())
     {
 
-//std::cout << "action list ";
-//for (vector<int>::iterator it = test_env->action_list.begin(); it != test_env->action_list.end(); ++it) {
-//		cout << *it << " ";
-//	}
-//	std::cout << std::endl;
 	mkl_free_buffers();
 
 
@@ -509,11 +412,7 @@ double GetSol(const int gid, int* sol, GSet* GSetTest2, int nqval) {
 	double time_pred = ((double)(end_pred - init_pred))/CLOCKS_PER_SEC;
 
         auto& scores = *(list_pred[0]);
-	
-        //new_action = arg_max(test_env->graph->num_nodes, scores.data());
 
-//nqval new actions
-	//std::cout << "selecting " << nqval << std::endl;
 	for(int i = 0; i<nqval; ++i){
 		new_action = arg_max(test_env->graph->num_nodes, scores.data());
 		//std::cout << "action " << new_action << " value " << scores.data()[new_action] <<std::endl;
@@ -522,45 +421,8 @@ double GetSol(const int gid, int* sol, GSet* GSetTest2, int nqval) {
 	}
 
 
-
-
-
-	//auto& qval = scores.data();
-	//std::cout << "action " << new_action << std::endl; //std::vector< std::vector<double>* > list_pred;
-
-
-//PRINT QVALUES AND DELATQV
-/*
-std::cout << "pred list ";
-for (vector<double>::iterator it = (*list_pred[0]).begin(); it != (*list_pred[0]).end(); ++it) {
-		cout << *it << " ";
-	}
-	std::cout << std::endl;
-
-if(deltas_cond){
-int i = 0;
-std::cout << "deltas list ";
-for (vector<double>::iterator it = (*list_pred[0]).begin(); it != (*list_pred[0]).end(); ++it) {
-		cout << *it-old_scores[i] << " ";
-		i++;
-	}
-	std::cout << std::endl;}
-
-std::cout << "new_action " << new_action << std::endl;
-deltas_cond = 1;*/
-
-//std::cout << "states ";
-//for (vector<int>::iterator it = (*states[0]).begin(); it != (*states[0]).end(); ++it) {
-//		cout << *it << " ";
-//	}
-//	std::cout << std::endl;
-
 	old_scores = *(list_pred[0]);
-
-
-        //v += test_env->step(new_action) / r_scaling;
     }
-//std::cerr << "gestsol2	" << std::endl;
 
     sol[0] = test_env->graph->num_nodes;
     sol[1] = test_env->width;
