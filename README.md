@@ -46,7 +46,7 @@ cp Makefile_example Makefile
 make
 ```
 ```shell
-cd /indepset/sources/code/
+cd indepset/sources/code/
 cp Makefile_example Makefile
 make
 ```
